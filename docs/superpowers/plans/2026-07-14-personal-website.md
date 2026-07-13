@@ -44,7 +44,7 @@
 - Create: `package.json`
 - Create: `astro.config.mjs`
 - Create: `tsconfig.json`
-- Create: `.gitignore`
+- Modify: `.gitignore`
 - Create: `src/pages/index.astro`
 - Create: `tests/e2e/smoke.spec.ts`
 - Create: `playwright.config.ts`
@@ -115,6 +115,7 @@ test-results/
 .DS_Store
 .superpowers/
 work/
+.worktrees/
 ~~~
 
 - [ ] **Step 2: Install dependencies and the Playwright browser**
@@ -246,6 +247,7 @@ describe('content schemas', () => {
       cover: '/images/article-fallback.svg',
       lang: 'zh',
       translationKey: 'article',
+      readingMinutes: 2,
       draft: false,
     }).success).toBe(true);
   });
@@ -302,6 +304,7 @@ export const postSchema = z.object({
   cover: z.string().startsWith('/'),
   lang: language,
   translationKey: z.string().min(1),
+  readingMinutes: z.number().int().positive(),
   draft: z.boolean().default(false),
 });
 
@@ -388,6 +391,7 @@ tags: [开发记录, macOS]
 cover: /images/article-fallback.svg
 lang: zh
 translationKey: macos-setup-workflow
+readingMinutes: 3
 draft: false
 ---
 
@@ -407,6 +411,7 @@ tags: [隐私, Node.js]
 cover: /images/article-fallback.svg
 lang: zh
 translationKey: api-key-privacy
+readingMinutes: 2
 draft: false
 ---
 
@@ -650,12 +655,13 @@ interface Props {
   date: Date;
   locale: Locale;
   languageHref?: string;
+  readingMinutes?: number;
 }
-const { title, summary, date, locale, languageHref } = Astro.props;
+const { title, summary, date, locale, languageHref, readingMinutes } = Astro.props;
 ---
 <BaseLayout title={title} description={summary} locale={locale} languageHref={languageHref}>
   <article class="prose shell">
-    <p class="eyebrow">{new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'medium' }).format(date)}</p>
+    <p class="eyebrow">{new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'medium' }).format(date)}{readingMinutes ? ' · ' + readingMinutes + (locale === 'zh' ? ' 分钟阅读' : ' min read') : ''}</p>
     <h1>{title}</h1>
     <p class="lede">{summary}</p>
     <slot />
@@ -852,7 +858,7 @@ const { post, href } = Astro.props;
 <article class="card">
   <img src={post.data.cover} alt={post.data.title + '文章封面'} width="1600" height="900" />
   <div class="card-body">
-    <p class="eyebrow">{new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium' }).format(post.data.publishedAt)}</p>
+    <p class="eyebrow">{new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium' }).format(post.data.publishedAt)} · {post.data.readingMinutes} 分钟阅读</p>
     <h2><a href={href}>{post.data.title}</a></h2>
     <p>{post.data.summary}</p>
     <ul class="tags" aria-label="文章标签">{post.data.tags.map((tag) => <li>{tag}</li>)}</ul>
@@ -954,7 +960,7 @@ interface Props { entry: CollectionEntry<'posts'>; }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
-<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.publishedAt} locale="zh" languageHref="/en/?notice=zh-only">
+<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.publishedAt} locale="zh" languageHref="/en/?notice=zh-only" readingMinutes={entry.data.readingMinutes}>
   <Content />
 </ContentLayout>
 ~~~
