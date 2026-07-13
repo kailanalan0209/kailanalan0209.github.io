@@ -30,3 +30,12 @@ test('flagship projects and first posts have detail pages', async ({ page }) => 
     await expect(page.locator('main article')).toBeVisible();
   }
 });
+
+test('post cards and details expose UTC-stable reading metadata', async ({ page }) => {
+  await page.goto('/posts/');
+  await expect(page.locator('.card').filter({ hasText: 'API Key 仪表盘中的隐私边界' }).locator('.eyebrow'))
+    .toHaveText('2026年7月14日 · 2 分钟阅读');
+
+  await page.goto('/posts/api-key-privacy/');
+  await expect(page.locator('main article > .eyebrow')).toHaveText('2026年7月14日 · 2 分钟阅读');
+});

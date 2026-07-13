@@ -1,12 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/date';
 interface Props { post: CollectionEntry<'posts'>; href: string; }
 const { post, href } = Astro.props;
 ---
 <article class="card">
   <img src={post.data.cover} alt={post.data.title + '文章封面'} width="1600" height="900" />
   <div class="card-body">
-    <p class="eyebrow">{new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium' }).format(post.data.publishedAt)} · {post.data.readingMinutes} 分钟阅读</p>
+    <p class="eyebrow">{formatDate(post.data.publishedAt, 'zh')} · {post.data.readingMinutes} 分钟阅读</p>
     <h2><a href={href}>{post.data.title}</a></h2>
     <p>{post.data.summary}</p>
     <ul class="tags" aria-label="文章标签">{post.data.tags.map((tag) => <li>{tag}</li>)}</ul>
