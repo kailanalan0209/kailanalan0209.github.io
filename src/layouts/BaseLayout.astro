@@ -1,0 +1,33 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { site, type Locale } from '../lib/site';
+import '../styles/global.css';
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  languageHref?: string;
+}
+const { title, description, locale, languageHref = locale === 'zh' ? '/en/' : '/' } = Astro.props;
+const documentTitle = title === site.name ? title : title + ' · ' + site.name;
+---
+<!doctype html>
+<html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
+    <title>{documentTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{locale === 'zh' ? '跳到主要内容' : 'Skip to content'}</a>
+    <SiteHeader locale={locale} languageHref={languageHref} />
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <SiteFooter locale={locale} />
+  </body>
+</html>

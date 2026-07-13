@@ -1,0 +1,21 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { Locale } from '../lib/site';
+interface Props {
+  title: string;
+  summary: string;
+  date: Date;
+  locale: Locale;
+  languageHref?: string;
+  readingMinutes?: number;
+}
+const { title, summary, date, locale, languageHref, readingMinutes } = Astro.props;
+---
+<BaseLayout title={title} description={summary} locale={locale} languageHref={languageHref}>
+  <article class="prose shell">
+    <p class="eyebrow">{new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'medium' }).format(date)}{readingMinutes ? ' · ' + readingMinutes + (locale === 'zh' ? ' 分钟阅读' : ' min read') : ''}</p>
+    <h1>{title}</h1>
+    <p class="lede">{summary}</p>
+    <slot />
+  </article>
+</BaseLayout>

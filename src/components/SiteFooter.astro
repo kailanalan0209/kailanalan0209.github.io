@@ -1,0 +1,10 @@
+---
+import type { Locale } from '../lib/site';
+import { site } from '../lib/site';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+---
+<footer class="site-footer shell">
+  <p>WKL · 2026</p>
+  <p><a href={'mailto:' + site.email}>{locale === 'zh' ? '联系我' : 'Contact'} · {site.email}</a></p>
+</footer>

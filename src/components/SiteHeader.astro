@@ -1,0 +1,18 @@
+---
+import LanguageLink from './LanguageLink.astro';
+import { getLocalePath, type Locale } from '../lib/site';
+interface Props { locale: Locale; languageHref: string; }
+const { locale, languageHref } = Astro.props;
+const copy = locale === 'zh'
+  ? { projects: '项目', posts: '文章', about: '关于', language: 'EN' }
+  : { projects: 'Projects', posts: 'Notes', about: 'About', language: '中' };
+---
+<header class="site-header shell">
+  <a class="wordmark" href={getLocalePath(locale)}>WKL<span aria-hidden="true">●</span></a>
+  <nav aria-label={locale === 'zh' ? '主导航' : 'Primary'}>
+    <a href={getLocalePath(locale, '/projects/')}>{copy.projects}</a>
+    <a href={locale === 'zh' ? '/posts/' : '/en/?notice=zh-only'}>{copy.posts}</a>
+    <a href={getLocalePath(locale, '/about/')}>{copy.about}</a>
+    <LanguageLink href={languageHref} label={copy.language} />
+  </nav>
+</header>
