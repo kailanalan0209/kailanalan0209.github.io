@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const posts = (await getCollection('posts'))
+  .filter((entry) => entry.data.lang === 'zh' && !entry.data.draft)
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+<BaseLayout title="文章" description="WKL 的开发记录与思考。" locale="zh" languageHref="/en/?notice=zh-only">
+  <section class="section shell"><h1>文章</h1><div class="card-grid">
+    {posts.map((post) => <PostCard post={post} href={'/posts/' + post.id + '/'} />)}
+  </div></section>
+</BaseLayout>

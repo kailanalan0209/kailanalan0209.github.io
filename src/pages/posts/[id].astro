@@ -1,0 +1,14 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+export async function getStaticPaths() {
+  const entries = (await getCollection('posts')).filter((entry) => entry.data.lang === 'zh' && !entry.data.draft);
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+interface Props { entry: CollectionEntry<'posts'>; }
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.publishedAt} locale="zh" languageHref="/en/?notice=zh-only" readingMinutes={entry.data.readingMinutes}>
+  <Content />
+</ContentLayout>

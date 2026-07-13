@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from '../../components/ProjectCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const projects = (await getCollection('projects'))
+  .filter((entry) => entry.data.lang === 'zh')
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<BaseLayout title="项目" description="WKL 的项目与实践。" locale="zh" languageHref="/en/projects/">
+  <section class="section shell"><h1>项目</h1><div class="card-grid">
+    {projects.map((project) => <ProjectCard project={project} href={'/projects/' + project.id + '/'} />)}
+  </div></section>
+</BaseLayout>

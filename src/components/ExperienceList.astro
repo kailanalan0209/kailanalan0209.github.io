@@ -1,0 +1,15 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { entries: CollectionEntry<'experience'>[]; }
+const { entries } = Astro.props;
+---
+<ul class="experience-list">
+  {entries.map((entry) => (
+    <li>
+      <p class="eyebrow">{entry.data.date} · {entry.data.type}</p>
+      <h3>{entry.data.title}</h3>
+      <p>{entry.data.contribution}</p>
+      <p>{entry.data.outcome}</p>
+    </li>
+  ))}
+</ul>

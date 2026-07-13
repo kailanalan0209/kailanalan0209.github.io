@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'>; href: string; locale?: 'zh' | 'en'; }
+const { project, href, locale = 'zh' } = Astro.props;
+---
+<article class="card">
+  <img src={project.data.cover} alt={project.data.title + (locale === 'zh' ? '项目封面' : ' project cover')} width="1600" height="900" />
+  <div class="card-body">
+    <p class="eyebrow">{project.data.status}</p>
+    <h2><a href={href}>{project.data.title}</a></h2>
+    <p>{project.data.summary}</p>
+    <ul class="tags" aria-label={locale === 'zh' ? '使用技术' : 'Technologies'}>
+      {project.data.technologies.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</article>
