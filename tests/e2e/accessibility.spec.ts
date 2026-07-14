@@ -29,3 +29,43 @@ test('reduced motion disables transitions', async ({ page }) => {
   );
   expect(reducedDuration).toBe('0s');
 });
+
+test('home card titles follow their section headings', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.getByRole('heading', { name: '精选项目', level: 2 })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '最新文章', level: 2 })).toBeVisible();
+  await expect(page.locator('.card h3')).toHaveCount(4);
+  await expect(page.locator('.card h2')).toHaveCount(0);
+
+  await page.goto('/projects/');
+  await expect(page.locator('.card h2')).toHaveCount(2);
+  await expect(page.locator('.card h3')).toHaveCount(0);
+
+  await page.goto('/posts/');
+  await expect(page.locator('.card h2')).toHaveCount(2);
+  await expect(page.locator('.card h3')).toHaveCount(0);
+});
+
+test('card images use deferred asynchronous decoding', async ({ page }) => {
+  await page.goto('/');
+
+  const images = page.locator('.card img');
+  await expect(images.first()).toHaveAttribute('loading', 'lazy');
+  await expect(images.first()).toHaveAttribute('decoding', 'async');
+});
+
+test('primary navigation identifies only the current static section', async ({ page }) => {
+  for (const [path, name] of [
+    ['/projects/', '项目'],
+    ['/posts/api-key-privacy/', '文章'],
+    ['/about/', '关于'],
+    ['/en/projects/api-pulse/', 'Projects'],
+    ['/en/about/', 'About'],
+  ] as const) {
+    await page.goto(path);
+    await expect(page.getByRole('navigation').getByRole('link', { name, exact: true }))
+      .toHaveAttribute('aria-current', 'page');
+    await expect(page.getByRole('navigation').locator('a[aria-current="page"]')).toHaveCount(1);
+  }
+});

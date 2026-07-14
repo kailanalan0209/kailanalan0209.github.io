@@ -1,23 +1,26 @@
 import { access, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const root = path.resolve(process.env.AUDIT_DIR || 'dist');
+const controlledRoot = process.env.AUDIT_DIR;
+const root = path.resolve(controlledRoot || 'dist');
 const auditOrigin = new URL('https://audit.invalid');
+const publishableTextExtensions = new Set(['.html', '.css', '.js', '.mjs', '.json', '.xml', '.txt', '.svg']);
+const sourceTextExtensions = new Set([...publishableTextExtensions, '.astro', '.ts', '.tsx', '.md', '.mdx', '.yaml', '.yml']);
 const sensitive = [
   /04231613/,
   /\/Users\//,
   /API_KEY\s*=/,
   /sk-[A-Za-z0-9]/,
-  /BEGIN PRIVATE KEY/,
+  /BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY/,
 ];
 
-async function walk(directory) {
+async function walk(directory, extensions) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = await Promise.all(entries.map((entry) => {
     const target = path.join(directory, entry.name);
-    return entry.isDirectory() ? walk(target) : [target];
+    return entry.isDirectory() ? walk(target, extensions) : [target];
   }));
-  return files.flat().filter((file) => file.endsWith('.html'));
+  return files.flat().filter((file) => extensions.has(path.extname(file).toLowerCase()));
 }
 
 function toTarget(href) {
@@ -46,13 +49,23 @@ function toTarget(href) {
 }
 
 const errors = [];
-const files = await walk(root);
-for (const file of files) {
-  const html = await readFile(file, 'utf8');
+const scanRoots = controlledRoot
+  ? [{ directory: root, extensions: publishableTextExtensions, label: root }]
+  : [
+      { directory: root, extensions: publishableTextExtensions, label: root },
+      { directory: path.resolve('src'), extensions: sourceTextExtensions, label: path.resolve() },
+      { directory: path.resolve('public'), extensions: sourceTextExtensions, label: path.resolve() },
+    ];
+const files = (await Promise.all(scanRoots.map(async (scanRoot) => (
+  await walk(scanRoot.directory, scanRoot.extensions)
+).map((file) => ({ ...scanRoot, file }))))).flat();
+for (const { file, label } of files) {
+  const content = await readFile(file, 'utf8');
   for (const pattern of sensitive) {
-    if (pattern.test(html)) errors.push(path.relative(root, file) + ': sensitive match ' + pattern);
+    if (pattern.test(content)) errors.push(path.relative(label, file) + ': sensitive match ' + pattern);
   }
-  for (const match of html.matchAll(/href=["']([^"']+)["']/g)) {
+  if (!file.endsWith('.html') || !file.startsWith(root + path.sep)) continue;
+  for (const match of content.matchAll(/href=["']([^"']+)["']/g)) {
     const result = toTarget(match[1]);
     if (!result) continue;
     if (result.error) {
@@ -68,4 +81,5 @@ if (errors.length) {
   console.error(errors.join('\n'));
   process.exit(1);
 }
-console.log('Build audit passed: ' + files.length + ' HTML files checked.');
+const htmlCount = files.filter(({ file }) => file.endsWith('.html') && file.startsWith(root + path.sep)).length;
+console.log('Build audit passed: ' + htmlCount + ' HTML files checked. ' + files.length + ' text files scanned.');

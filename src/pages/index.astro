@@ -17,10 +17,10 @@ const experience = (await getCollection('experience')).filter((e) => e.data.lang
     <p class="lede">我通过真实项目学习，把遇到的问题整理成可维护的工具和可复用的知识。</p>
   </section>
   <section class="section shell"><div class="section-heading"><h2>精选项目</h2><a href="/projects/">查看全部</a></div>
-    <div class="card-grid">{projects.map((project) => <ProjectCard project={project} href={'/projects/' + project.id + '/'} />)}</div>
+    <div class="card-grid">{projects.map((project) => <ProjectCard project={project} href={'/projects/' + project.id + '/'} headingLevel={3} />)}</div>
   </section>
   <section class="section shell"><div class="section-heading"><h2>最新文章</h2><a href="/posts/">查看全部</a></div>
-    <div class="card-grid">{posts.map((post) => <PostCard post={post} href={'/posts/' + post.id + '/'} />)}</div>
+    <div class="card-grid">{posts.map((post) => <PostCard post={post} href={'/posts/' + post.id + '/'} headingLevel={3} />)}</div>
   </section>
   <section class="section shell"><h2>其他经历</h2><ExperienceList entries={experience} /></section>
   <section class="section shell"><h2>继续了解</h2><p><a href="/about/">关于 WKL 与履历摘要</a></p></section>

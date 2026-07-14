@@ -18,7 +18,7 @@ const projects = (await getCollection('projects')).filter((entry) => entry.data.
     <p class="lede">I learn through real projects, then turn the process into maintainable tools and reusable notes.</p>
   </section>
   <section class="section shell"><h2>Selected projects</h2><div class="card-grid">
-    {projects.map((project) => <ProjectCard project={project} locale="en" href={'/en/projects/' + project.data.translationKey + '/'} />)}
+    {projects.map((project) => <ProjectCard project={project} locale="en" href={'/en/projects/' + project.data.translationKey + '/'} headingLevel={3} />)}
   </div></section>
   <section class="section shell"><h2>More</h2><p><a href="/en/about/">About WKL and resume summary</a></p></section>
 </BaseLayout>

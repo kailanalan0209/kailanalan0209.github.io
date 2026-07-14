@@ -1,18 +1,28 @@
 ---
 import LanguageLink from './LanguageLink.astro';
 import { getLocalePath, type Locale } from '../lib/site';
-interface Props { locale: Locale; languageHref: string; }
-const { locale, languageHref } = Astro.props;
+interface Props { locale: Locale; languageHref: string; currentPath: string; }
+const { locale, languageHref, currentPath } = Astro.props;
 const copy = locale === 'zh'
   ? { projects: '项目', posts: '文章', about: '关于', language: 'EN' }
   : { projects: 'Projects', posts: 'Notes', about: 'About', language: '中' };
+const projectsHref = getLocalePath(locale, '/projects/');
+const postsHref = locale === 'zh' ? '/posts/' : '/en/?notice=zh-only';
+const aboutHref = getLocalePath(locale, '/about/');
+const currentSection = currentPath.startsWith(projectsHref)
+  ? 'projects'
+  : locale === 'zh' && currentPath.startsWith('/posts/')
+    ? 'posts'
+    : currentPath.startsWith(aboutHref)
+      ? 'about'
+      : undefined;
 ---
 <header class="site-header shell">
   <a class="wordmark" href={getLocalePath(locale)}>WKL<span aria-hidden="true">●</span></a>
   <nav aria-label={locale === 'zh' ? '主导航' : 'Primary'}>
-    <a href={getLocalePath(locale, '/projects/')}>{copy.projects}</a>
-    <a href={locale === 'zh' ? '/posts/' : '/en/?notice=zh-only'}>{copy.posts}</a>
-    <a href={getLocalePath(locale, '/about/')}>{copy.about}</a>
+    <a href={projectsHref} aria-current={currentSection === 'projects' ? 'page' : undefined}>{copy.projects}</a>
+    <a href={postsHref} aria-current={currentSection === 'posts' ? 'page' : undefined}>{copy.posts}</a>
+    <a href={aboutHref} aria-current={currentSection === 'about' ? 'page' : undefined}>{copy.about}</a>
     <LanguageLink href={languageHref} label={copy.language} />
   </nav>
 </header>

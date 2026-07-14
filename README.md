@@ -22,9 +22,9 @@ npm run verify
 - 文章：`src/content/posts/`
 - 经历：`src/content/experience/`
 
-项目必填字段：`title`、`summary`、`role`、`date`、`technologies`、`cover`、`status`、`outcome`、`lang`、`translationKey`。`featured` 可选，默认为 `false`。
+项目必填字段：`title`、`summary`、`role`、`date`、`technologies`、`status`、`outcome`、`lang`、`translationKey`。`cover` 可选，默认为 `/images/project-fallback.svg`；`featured` 可选，默认为 `false`。
 
-文章必填字段：`title`、`summary`、`publishedAt`、`tags`、`cover`、`lang`、`translationKey`、`readingMinutes`。`draft` 可选，默认为 `false`。
+文章必填字段：`title`、`summary`、`publishedAt`、`tags`、`lang`、`translationKey`、`readingMinutes`。`cover` 可选，默认为 `/images/article-fallback.svg`；`draft` 可选，默认为 `false`。
 
 经历必填字段：`title`、`date`、`contribution`、`outcome`、`type`、`lang`、`translationKey`。
 

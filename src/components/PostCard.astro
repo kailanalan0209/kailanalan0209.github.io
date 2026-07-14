@@ -1,14 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '../lib/date';
-interface Props { post: CollectionEntry<'posts'>; href: string; }
-const { post, href } = Astro.props;
+interface Props { post: CollectionEntry<'posts'>; href: string; headingLevel?: 2 | 3; }
+const { post, href, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 <article class="card">
-  <img src={post.data.cover} alt={post.data.title + '文章封面'} width="1600" height="900" />
+  <img src={post.data.cover} alt={post.data.title + '文章封面'} width="1600" height="900" loading="lazy" decoding="async" />
   <div class="card-body">
     <p class="eyebrow">{formatDate(post.data.publishedAt, 'zh')} · {post.data.readingMinutes} 分钟阅读</p>
-    <h2><a href={href}>{post.data.title}</a></h2>
+    <Heading><a href={href}>{post.data.title}</a></Heading>
     <p>{post.data.summary}</p>
     <ul class="tags" aria-label="文章标签">{post.data.tags.map((tag) => <li>{tag}</li>)}</ul>
   </div>

@@ -23,6 +23,22 @@ function runAudit(html, prepare) {
   }
 }
 
+function runDefaultAudit(sourceDirectory) {
+  const base = mkdtempSync(path.join(tmpdir(), 'portfolio-audit-default-'));
+  for (const directory of ['dist', 'src', 'public']) mkdirSync(path.join(base, directory));
+  writeFileSync(path.join(base, 'dist', 'index.html'), '<p>safe</p>');
+  const sample = ['BEGIN ', 'RSA ', 'PRIVATE ', 'KEY'].join('');
+  writeFileSync(path.join(base, sourceDirectory, sourceDirectory === 'src' ? 'sample.ts' : 'sample.svg'), sample);
+  const env = { ...process.env };
+  delete env.AUDIT_DIR;
+
+  try {
+    return spawnSync(process.execPath, [auditScript], { cwd: base, encoding: 'utf8', env });
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+}
+
 describe('build audit', () => {
   it('reports a broken root-relative link', () => {
     const result = runAudit('<a href="/missing/">broken</a>');
@@ -53,10 +69,39 @@ describe('build audit', () => {
     { name: 'key assignment', sample: ['API', '_KEY', ' = example'].join('') },
     { name: 'token prefix', sample: ['s', 'k', '-', 'example'].join('') },
     { name: 'private-key header', sample: ['BEGIN ', 'PRIVATE ', 'KEY'].join('') },
+    { name: 'RSA private-key header', sample: ['BEGIN ', 'RSA ', 'PRIVATE ', 'KEY'].join('') },
+    { name: 'OpenSSH private-key header', sample: ['BEGIN ', 'OPENSSH ', 'PRIVATE ', 'KEY'].join('') },
   ])('reports the $name sensitive category', ({ sample }) => {
     const result = runAudit('<p>' + sample + '</p>');
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('sensitive match');
+  });
+
+  it('scans publishable non-HTML text assets for sensitive content', () => {
+    const sample = ['BEGIN ', 'EC ', 'PRIVATE ', 'KEY'].join('');
+    const result = runAudit('<p>safe</p>', (base) => {
+      writeFileSync(path.join(base, 'dist', 'styles.css'), `/* ${sample} */`);
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('styles.css: sensitive match');
+  });
+
+  it.each(['src', 'public'])('scans %s text during a normal audit', (directory) => {
+    const result = runDefaultAudit(directory);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(directory + '/sample.');
+  });
+
+  it('keeps AUDIT_DIR scans scoped to the controlled fixture', () => {
+    const result = runAudit('<p>safe</p>', (base) => {
+      mkdirSync(path.join(base, 'src'));
+      const sample = ['BEGIN ', 'OPENSSH ', 'PRIVATE ', 'KEY'].join('');
+      writeFileSync(path.join(base, 'src', 'sample.ts'), sample);
+    });
+
+    expect(result.status).toBe(0);
   });
 });
