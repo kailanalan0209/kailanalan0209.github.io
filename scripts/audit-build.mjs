@@ -11,7 +11,7 @@ const sensitive = [
   /\/Users\//,
   /API_KEY\s*=/,
   /sk-[A-Za-z0-9]/,
-  /BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY/,
+  /BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY/,
 ];
 
 async function walk(directory, extensions) {

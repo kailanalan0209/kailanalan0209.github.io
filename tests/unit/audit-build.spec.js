@@ -69,6 +69,8 @@ describe('build audit', () => {
     { name: 'key assignment', sample: ['API', '_KEY', ' = example'].join('') },
     { name: 'token prefix', sample: ['s', 'k', '-', 'example'].join('') },
     { name: 'private-key header', sample: ['BEGIN ', 'PRIVATE ', 'KEY'].join('') },
+    { name: 'encrypted private-key header', sample: ['BEGIN ', 'ENCRYPTED ', 'PRIVATE ', 'KEY'].join('') },
+    { name: 'DSA private-key header', sample: ['BEGIN ', 'DSA ', 'PRIVATE ', 'KEY'].join('') },
     { name: 'RSA private-key header', sample: ['BEGIN ', 'RSA ', 'PRIVATE ', 'KEY'].join('') },
     { name: 'OpenSSH private-key header', sample: ['BEGIN ', 'OPENSSH ', 'PRIVATE ', 'KEY'].join('') },
   ])('reports the $name sensitive category', ({ sample }) => {
