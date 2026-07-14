@@ -39,3 +39,11 @@ test('post cards and details expose UTC-stable reading metadata', async ({ page 
   await page.goto('/posts/api-key-privacy/');
   await expect(page.locator('main article > .eyebrow')).toHaveText('2026年7月14日 · 2 分钟阅读');
 });
+
+test('generated pages omit canonical links until the production origin is known', async ({ page }) => {
+  for (const path of ['/', '/posts/api-key-privacy/']) {
+    await page.goto(path);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+    expect(await page.content()).not.toContain('http://localhost:4321');
+  }
+});

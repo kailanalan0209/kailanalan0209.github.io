@@ -19,6 +19,7 @@
 - No CMS, account system, comments, search, analytics, newsletter, database, automatic translation, custom domain, or deployment automation.
 - Missing required content must fail the build; missing English articles must redirect to `/en/?notice=zh-only`.
 - Every task must preserve keyboard navigation, visible focus, adequate contrast, alt text, and reduced-motion behavior.
+- Do not output a canonical link until the real production origin is known.
 
 ---
 
@@ -631,7 +632,6 @@ const documentTitle = title === site.name ? title : title + ' · ' + site.name;
     <meta name="color-scheme" content="dark" />
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
-    <link rel="canonical" href={Astro.url.href} />
     <title>{documentTitle}</title>
   </head>
   <body>
