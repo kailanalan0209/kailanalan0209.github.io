@@ -47,3 +47,9 @@ test('generated pages omit canonical links until the production origin is known'
     expect(await page.content()).not.toContain('http://localhost:4321');
   }
 });
+
+test('404 page offers both recovery routes', async ({ page }) => {
+  await page.goto('/404.html');
+  await expect(page.getByRole('link', { name: '返回中文首页' })).toHaveAttribute('href', '/');
+  await expect(page.getByRole('link', { name: 'English home' })).toHaveAttribute('href', '/en/');
+});
