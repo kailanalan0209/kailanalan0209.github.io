@@ -2,6 +2,7 @@ import { access, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const root = path.resolve(process.env.AUDIT_DIR || 'dist');
+const auditOrigin = new URL('https://audit.invalid');
 const sensitive = [
   /04231613/,
   /\/Users\//,
@@ -20,11 +21,28 @@ async function walk(directory) {
 }
 
 function toTarget(href) {
-  const pathname = href.split('#')[0].split('?')[0];
-  if (!pathname.startsWith('/')) return null;
-  if (pathname === '/') return path.join(root, 'index.html');
-  if (pathname.endsWith('/')) return path.join(root, pathname, 'index.html');
-  return path.join(root, pathname.replace(/^\//, ''));
+  if (!href.startsWith('/') || href.startsWith('//')) return null;
+
+  let rawPathname;
+  let url;
+  try {
+    rawPathname = decodeURIComponent(href.split(/[?#]/, 1)[0]).replaceAll('\\', '/');
+    url = new URL(href, auditOrigin);
+  } catch {
+    return { error: 'invalid internal link ' + href };
+  }
+  if (url.origin !== auditOrigin.origin || rawPathname.split('/').includes('..')) {
+    return { error: 'invalid internal link ' + href };
+  }
+
+  const pathname = decodeURIComponent(url.pathname);
+  const relativePath = pathname.replace(/^\//, '');
+  const target = path.resolve(root, relativePath, pathname.endsWith('/') ? 'index.html' : '');
+  const relativeTarget = path.relative(root, target);
+  if (relativeTarget === '..' || relativeTarget.startsWith('..' + path.sep) || path.isAbsolute(relativeTarget)) {
+    return { error: 'invalid internal link ' + href };
+  }
+  return { target };
 }
 
 const errors = [];
@@ -35,9 +53,13 @@ for (const file of files) {
     if (pattern.test(html)) errors.push(path.relative(root, file) + ': sensitive match ' + pattern);
   }
   for (const match of html.matchAll(/href=["']([^"']+)["']/g)) {
-    const target = toTarget(match[1]);
-    if (!target) continue;
-    try { await access(target); }
+    const result = toTarget(match[1]);
+    if (!result) continue;
+    if (result.error) {
+      errors.push(path.relative(root, file) + ': ' + result.error);
+      continue;
+    }
+    try { await access(result.target); }
     catch { errors.push(path.relative(root, file) + ': broken link ' + match[1]); }
   }
 }
