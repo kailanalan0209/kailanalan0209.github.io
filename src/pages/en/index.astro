@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from '../../components/ProjectCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../lib/site';
+const projects = (await getCollection('projects')).filter((entry) => entry.data.lang === 'en' && entry.data.featured);
+---
+<BaseLayout title="WKL" description={site.enDescription} locale="en" languageHref="/">
+  <section class="hero shell">
+    <p id="translation-notice" role="status" hidden>This content is currently available in Chinese only.</p>
+    <script is:inline>
+      if (new URLSearchParams(window.location.search).get('notice') === 'zh-only') {
+        document.getElementById('translation-notice')?.removeAttribute('hidden');
+      }
+    </script>
+    <p class="eyebrow">PERSONAL LAB · DIGITAL GARDEN</p>
+    <h1>Turn curiosity into things people can see and use.</h1>
+    <p class="lede">I learn through real projects, then turn the process into maintainable tools and reusable notes.</p>
+  </section>
+  <section class="section shell"><h2>Selected projects</h2><div class="card-grid">
+    {projects.map((project) => <ProjectCard project={project} locale="en" href={'/en/projects/' + project.data.translationKey + '/'} />)}
+  </div></section>
+  <section class="section shell"><h2>More</h2><p><a href="/en/about/">About WKL and resume summary</a></p></section>
+</BaseLayout>
