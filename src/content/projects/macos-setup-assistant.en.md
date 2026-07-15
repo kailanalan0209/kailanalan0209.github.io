@@ -13,6 +13,22 @@ translationKey: macos-setup-assistant
 featured: true
 ---
 
-The native SwiftUI interface handles selection, previews, and results while Shell scripts keep checks and installation inspectable.
+## Background
 
-The workflow includes dry-run behavior, package validation, post-install verification, logs, and an APFS copy-on-write optimization with a normal-copy fallback.
+This project supports situations where Macs need to be configured repeatedly by turning separate preparation and installation steps into one local workflow.
+
+## Problem
+
+Software selection, safety checks, batch installation, and result review need to form one inspectable process while retaining the logs required to diagnose failures.
+
+## Approach
+
+The native SwiftUI interface handles software selection, wallpaper previews, and results. Shell scripts handle package validation and installation, keeping the interface separate from the inspectable execution layer.
+
+## Key implementation
+
+The workflow includes dry-run behavior, safety checks, post-install verification, and logs. Temporary staging prefers APFS copy-on-write and falls back to a normal copy when needed.
+
+## Outcome
+
+Selection, safety checks, installation, verification, and logs are combined in one maintainable local setup workflow.

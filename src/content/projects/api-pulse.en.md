@@ -13,6 +13,22 @@ translationKey: api-pulse
 featured: true
 ---
 
-API Pulse calls official endpoints from the server and summarizes requests, tokens, success rate, and estimated cost from a local database.
+## Background
 
-Keys remain in server memory, visitor sessions are isolated with HttpOnly cookies, and public deployments do not read the site owner's local credentials by default.
+API Pulse brings DeepSeek balance, MiMo key status, and locally recorded API usage into one dashboard.
+
+## Problem
+
+Balance and usage need a shared view without exposing API keys to the browser or allowing public visitors to read the site owner's local credentials.
+
+## Approach
+
+The server calls official endpoints for current status and summarizes requests, tokens, success rate, and estimated cost from a local SQLite database before returning displayable data to the browser.
+
+## Security boundaries
+
+Keys remain in server memory, visitors are isolated with HttpOnly session cookies, and public deployments do not read the site owner's local credentials by default.
+
+## Outcome
+
+Balance, key status, and local usage are presented in one dashboard within those privacy boundaries.

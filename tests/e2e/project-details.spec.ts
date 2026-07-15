@@ -65,3 +65,34 @@ test('post details do not expose project facts', async ({ page }) => {
   await page.goto('/posts/api-key-privacy/');
   await expect(page.locator('.project-facts')).toHaveCount(0);
 });
+
+for (const project of [
+  {
+    path: '/projects/macos-setup-assistant/',
+    headings: ['背景', '问题', '方案', '关键实现', '结果'],
+    evidence: ['dry-run', 'APFS 写时复制'],
+  },
+  {
+    path: '/projects/api-pulse/',
+    headings: ['背景', '问题', '方案', '安全边界', '结果'],
+    evidence: ['HttpOnly 会话 Cookie', '服务端内存'],
+  },
+  {
+    path: '/en/projects/macos-setup-assistant/',
+    headings: ['Background', 'Problem', 'Approach', 'Key implementation', 'Outcome'],
+    evidence: ['dry-run', 'APFS copy-on-write'],
+  },
+  {
+    path: '/en/projects/api-pulse/',
+    headings: ['Background', 'Problem', 'Approach', 'Security boundaries', 'Outcome'],
+    evidence: ['HttpOnly session cookies', 'server memory'],
+  },
+] as const) {
+  test(project.path + ' presents a structured case study', async ({ page }) => {
+    await page.goto(project.path);
+    await expect(page.locator('main article h2')).toHaveText([...project.headings]);
+    for (const phrase of project.evidence) {
+      await expect(page.locator('main article')).toContainText(phrase);
+    }
+  });
+}
