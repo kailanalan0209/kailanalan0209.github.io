@@ -14,9 +14,16 @@ for (const [path, title] of [
     await expect(image).toHaveAttribute('decoding', 'async');
     const presentation = await image.evaluate((element) => {
       const style = getComputedStyle(element);
-      return { objectFit: style.objectFit, backgroundColor: style.backgroundColor };
+      const rect = element.getBoundingClientRect();
+      return {
+        objectFit: style.objectFit,
+        backgroundColor: style.backgroundColor,
+        ratio: rect.width / rect.height,
+      };
     });
-    expect(presentation).toEqual({ objectFit: 'contain', backgroundColor: 'rgb(0, 0, 0)' });
+    expect(presentation.objectFit).toBe('contain');
+    expect(presentation.backgroundColor).toBe('rgb(0, 0, 0)');
+    expect(presentation.ratio).toBeCloseTo(16 / 9, 2);
   });
 }
 

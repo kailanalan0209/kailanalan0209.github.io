@@ -35,7 +35,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .card { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); transition: transform .2s ease, border-color .2s ease; }
 .card:hover { transform: translateY(-3px); border-color: var(--accent); }
-.card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.card img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 .card img.media-contain { background: #000; object-fit: contain; }
 .card-body { padding: 1.25rem; }
 .card h2, .card h3 { margin-block: .35rem; }
