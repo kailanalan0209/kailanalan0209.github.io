@@ -4,9 +4,9 @@
 
 **Goal:** Upgrade the site from Astro 5.18.2 to exactly Astro 7.0.9, remove the current high-severity production dependency audit failure, and preserve all existing site behavior.
 
-**Architecture:** Treat the existing unit, type, build-audit, and Playwright suites as the regression contract. Change only the pinned Astro dependency and npm lockfile first; modify `@astrojs/check`, source, or tests only when a concrete install or verification failure proves that a migration change is required.
+**Architecture:** Treat the existing unit, type, build-audit, and Playwright suites as the regression contract. Change only the approved runtime declaration, pinned Astro dependency, npm lockfile, and matching README requirement first; modify `@astrojs/check`, source, or tests only when a concrete install or verification failure proves that a migration change is required.
 
-**Tech Stack:** Node.js 20, npm, Astro 7.0.9, Astro Content Layer, TypeScript, Vitest, Playwright
+**Tech Stack:** Node.js 24.14.0 locally with a project floor of Node.js 22.12.0, npm, Astro 7.0.9, Astro Content Layer, TypeScript, Vitest, Playwright
 
 **Migration References:**
 
@@ -17,6 +17,8 @@
 ## Global Constraints
 
 - Pin Astro to exactly `7.0.9`.
+- Require Node.js `>=22.12.0` and npm `>=9.6.5` in `package.json`; use Node.js `24.14.0` for this local execution.
+- Before every shell command block that invokes Node or npm, export `PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH"` so the command cannot fall back to the unsupported system Node 20.11.1.
 - Keep TypeScript at `5.9.3`, Vitest at `3.2.7`, and Playwright at `1.61.1`.
 - Keep `@astrojs/check` at `0.9.9` unless npm reports an unsatisfied peer dependency or `astro check` proves incompatibility.
 - Do not use `npm audit fix --force` or a bulk dependency upgrade command.
@@ -28,8 +30,9 @@
 
 ## File Map
 
-- Modify: `package.json` — change only the pinned Astro version unless a proven `@astrojs/check` incompatibility requires the smallest compatible adjustment.
+- Modify: `package.json` — change the pinned Astro version and add the approved Node/npm `engines`; change nothing else unless a proven `@astrojs/check` incompatibility requires the smallest compatible adjustment.
 - Modify: `package-lock.json` — accept only dependency-graph changes produced by installing the approved exact version.
+- Modify: `README.md` — replace the Node 20 requirement with Node.js 22.12.0 or newer.
 - Reference: `src/content.config.ts` — verify that the existing Content Layer configuration continues to work; do not edit without a concrete failure.
 - Reference: `src/layouts/ContentLayout.astro` — verify date/read-time spacing; do not edit without a failing regression.
 - Reference: `src/components/SiteHeader.astro` and `src/components/ProjectCard.astro` — verify navigation and card text; do not edit without a failing regression.
@@ -56,6 +59,7 @@ Run:
 
 ```bash
 git status --short
+export PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH"
 node --version
 npm --version
 npm ls astro @astrojs/check typescript vitest @playwright/test --depth=0
@@ -64,15 +68,17 @@ npm ls astro @astrojs/check typescript vitest @playwright/test --depth=0
 Expected:
 
 - `git status --short` prints nothing.
-- Node reports a `v20.x` version.
+- Node reports `v24.14.0` and npm satisfies `>=9.6.5`.
 - Astro reports `5.18.2`.
 - `@astrojs/check`, TypeScript, Vitest, and Playwright report the versions listed in Global Constraints.
 
-- [ ] **Step 2: Run the complete pre-upgrade regression suite**
+- [ ] **Step 2: Install an isolated Node 24 baseline and run the complete regression suite**
 
 Run:
 
 ```bash
+export PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH"
+npm ci
 npm run verify
 ```
 
@@ -98,18 +104,37 @@ Expected: non-zero exit status with a high-severity Astro advisory. Save the ter
 ### Task 2: Install the Exact Astro 7 Version
 
 **Files:**
-- Modify: `package.json:15-17`
+- Modify: `package.json:1-24`
 - Modify: `package-lock.json`
+- Modify: `README.md:7`
 
 **Interfaces:**
 - Consumes: the passing baseline and expected audit failure from Task 1.
 - Produces: `astro@7.0.9` installed with no unrelated top-level dependency upgrades.
 
-- [ ] **Step 1: Install only the approved Astro version**
+- [ ] **Step 1: Declare the approved runtime floor**
+
+Edit `package.json` so the existing metadata includes:
+
+```json
+"engines": {
+  "node": ">=22.12.0",
+  "npm": ">=9.6.5"
+}
+```
+
+Replace README line 7 with:
+
+```markdown
+需要 Node.js 22.12.0 或更新版本，以及 npm 9.6.5 或更高版本。
+```
+
+- [ ] **Step 2: Install only the approved Astro version under Node 24**
 
 Run:
 
 ```bash
+export PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH"
 npm install --save-exact astro@7.0.9
 ```
 
@@ -121,28 +146,31 @@ Expected: npm exits with status 0 and updates `package.json` to contain exactly:
 }
 ```
 
+Expected: npm runs under Node 24.14.0, exits with status 0, and also copies the approved `engines` values into the root package entry in `package-lock.json`.
+
 If npm reports an unsatisfied peer dependency, stop before adding flags or changing another package. Record the exact error and use the systematic-debugging workflow to determine whether `@astrojs/check` is the proven cause.
 
-- [ ] **Step 2: Audit the dependency diff before testing**
+- [ ] **Step 3: Audit the dependency diff before testing**
 
 Run:
 
 ```bash
-git diff -- package.json package-lock.json
+git diff -- package.json package-lock.json README.md
 npm ls astro @astrojs/check typescript vitest @playwright/test --depth=0
 npm explain astro
 ```
 
 Expected:
 
-- `package.json` changes only `astro` from `5.18.2` to `7.0.9`.
+- `package.json` changes `astro` from `5.18.2` to `7.0.9` and adds only the approved `engines` block.
+- README changes only the documented Node minimum.
 - Astro resolves to `7.0.9`.
 - The four constrained development dependencies retain their original versions.
 - Lockfile changes are attributable to Astro's dependency graph.
 
 If any constrained top-level package changed, restore only that package's approved version with an exact npm install and re-run this step before continuing.
 
-- [ ] **Step 3: Run the fastest compatibility gates**
+- [ ] **Step 4: Run the fastest compatibility gates**
 
 Run:
 
@@ -158,7 +186,7 @@ Expected:
 
 If either command fails, stop and use systematic debugging. Modify source or `@astrojs/check` only when the error output and the official Astro 6/7 migration guides identify a specific required change.
 
-- [ ] **Step 4: Build and audit the production output**
+- [ ] **Step 5: Build and audit the production output**
 
 Run:
 
@@ -175,7 +203,7 @@ Expected:
 - The build audit passes.
 - The final command prints `14` after whitespace is ignored.
 
-- [ ] **Step 5: Verify the Astro 7 output boundaries directly**
+- [ ] **Step 6: Verify the Astro 7 output boundaries directly**
 
 Run:
 
@@ -193,7 +221,7 @@ Expected:
 - Chinese and English Markdown paragraphs are present in generated project pages.
 - The final command prints no matches.
 
-- [ ] **Step 6: Run the browser regression suite**
+- [ ] **Step 7: Run the browser regression suite**
 
 Run:
 
@@ -264,7 +292,7 @@ git diff --name-only
 Expected:
 
 - `git diff --check` prints nothing.
-- The expected changed files are `package.json` and `package-lock.json` only, unless Task 2 produced a documented, evidence-backed compatibility fix.
+- The expected changed files are `package.json`, `package-lock.json`, and `README.md` only, unless Task 2 produced a documented, evidence-backed compatibility fix.
 - No GitHub Pages, SEO, content, styling, or unrelated dependency changes appear.
 
 - [ ] **Step 4: Commit the verified upgrade**
@@ -272,7 +300,7 @@ Expected:
 Run:
 
 ```bash
-git add package.json package-lock.json
+git add package.json package-lock.json README.md
 git commit -m "chore: upgrade Astro to 7.0.9"
 ```
 
