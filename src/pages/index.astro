@@ -10,7 +10,7 @@ const posts = (await getCollection('posts')).filter((e) => e.data.lang === 'zh' 
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()).slice(0, 2);
 const experience = (await getCollection('experience')).filter((e) => e.data.lang === 'zh');
 ---
-<BaseLayout title="WKL" description={site.zhDescription} locale="zh" languageHref="/en/">
+<BaseLayout title="WKL" description={site.zhDescription} locale="zh" languageHref="/en/" alternateHref="/en/">
   <section class="hero shell">
     <p class="eyebrow">个人实验室 · DIGITAL GARDEN</p>
     <h1>把好奇心，做成看得见的东西。</h1>

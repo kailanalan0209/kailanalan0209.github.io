@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { site } from '../../lib/site';
 const projects = (await getCollection('projects')).filter((entry) => entry.data.lang === 'en' && entry.data.featured);
 ---
-<BaseLayout title="WKL" description={site.enDescription} locale="en" languageHref="/">
+<BaseLayout title="WKL" description={site.enDescription} locale="en" languageHref="/" alternateHref="/">
   <section class="hero shell">
     <p id="translation-notice" role="status" hidden>This content is currently available in Chinese only.</p>
     <script is:inline>

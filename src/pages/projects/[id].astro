@@ -12,6 +12,6 @@ const translations = (await getCollection('projects')).filter((item) => item.dat
 const translated = translations.find((item) => item.data.translationKey === entry.data.translationKey);
 const languageHref = translated ? '/en/projects/' + translated.data.translationKey + '/' : '/en/';
 ---
-<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.date} locale="zh" languageHref={languageHref}>
+<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.date} locale="zh" languageHref={languageHref} alternateHref={translated ? languageHref : undefined}>
   <Content />
 </ContentLayout>

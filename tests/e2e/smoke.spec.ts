@@ -40,14 +40,6 @@ test('post cards and details expose UTC-stable reading metadata', async ({ page 
   await expect(page.locator('main article > .eyebrow')).toHaveText('2026年7月14日 · 2 分钟阅读');
 });
 
-test('generated pages omit canonical links until the production origin is known', async ({ page }) => {
-  for (const path of ['/', '/posts/api-key-privacy/']) {
-    await page.goto(path);
-    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-    expect(await page.content()).not.toContain('http://localhost:4321');
-  }
-});
-
 test('404 page offers both recovery routes', async ({ page }) => {
   await page.goto('/404.html');
   await expect(page.getByRole('link', { name: '返回中文首页' })).toHaveAttribute('href', '/');

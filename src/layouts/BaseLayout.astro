@@ -8,9 +8,22 @@ interface Props {
   description: string;
   locale: Locale;
   languageHref?: string;
+  alternateHref?: string;
+  indexable?: boolean;
 }
-const { title, description, locale, languageHref = locale === 'zh' ? '/en/' : '/' } = Astro.props;
+const {
+  title,
+  description,
+  locale,
+  languageHref = locale === 'zh' ? '/en/' : '/',
+  alternateHref,
+  indexable = true,
+} = Astro.props;
 const documentTitle = title === site.name ? title : title + ' · ' + site.name;
+const canonicalUrl = indexable && Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const alternateUrl = canonicalUrl && alternateHref ? new URL(alternateHref, Astro.site) : undefined;
+const currentHreflang = locale === 'zh' ? 'zh-CN' : 'en';
+const alternateHreflang = locale === 'zh' ? 'en' : 'zh-CN';
 ---
 <!doctype html>
 <html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
@@ -19,6 +32,11 @@ const documentTitle = title === site.name ? title : title + ' · ' + site.name;
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {alternateUrl && <link rel="alternate" hreflang={currentHreflang} href={canonicalUrl} />}
+    {alternateUrl && <link rel="alternate" hreflang={alternateHreflang} href={alternateUrl} />}
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {canonicalUrl && <meta property="og:type" content="website" />}
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
     <title>{documentTitle}</title>

@@ -5,7 +5,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 const projects = (await getCollection('projects')).filter((entry) => entry.data.lang === 'en')
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
-<BaseLayout title="Projects" description="WKL projects and practice." locale="en" languageHref="/projects/">
+<BaseLayout title="Projects" description="WKL projects and practice." locale="en" languageHref="/projects/" alternateHref="/projects/">
   <section class="section shell"><h1>Projects</h1><div class="card-grid">
     {projects.map((project) => <ProjectCard project={project} locale="en" href={'/en/projects/' + project.data.translationKey + '/'} />)}
   </div></section>
