@@ -4,7 +4,8 @@ summary: A dashboard for DeepSeek balance, MiMo key status, and locally recorded
 role: Design and development
 date: 2026-07-13
 technologies: [Node.js, HTTP API, SQLite]
-cover: /images/project-fallback.svg
+cover: /images/api-pulse.jpg
+coverFit: contain
 status: 已完成产品
 outcome: Summarized balance and local usage without exposing API keys to the browser.
 lang: en
