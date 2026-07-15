@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  locale: 'zh' | 'en';
+}
+
+const { project, locale } = Astro.props;
+const copy = locale === 'zh'
+  ? { role: '角色', status: '状态', technologies: '技术栈', outcome: '结果' }
+  : { role: 'Role', status: 'Status', technologies: 'Technologies', outcome: 'Outcome' };
+const englishStatus = {
+  '已完成产品': 'Completed product',
+  '团队项目': 'Team project',
+  '概念设计': 'Concept design',
+} as const;
+const status = locale === 'zh' ? project.data.status : englishStatus[project.data.status];
+---
+<dl class="project-facts">
+  <div><dt>{copy.role}</dt><dd>{project.data.role}</dd></div>
+  <div><dt>{copy.status}</dt><dd>{status}</dd></div>
+  <div>
+    <dt>{copy.technologies}</dt>
+    <dd><ul class="tags">{project.data.technologies.map((item) => <li>{item}</li>)}</ul></dd>
+  </div>
+  <div><dt>{copy.outcome}</dt><dd>{project.data.outcome}</dd></div>
+</dl>
