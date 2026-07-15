@@ -30,7 +30,7 @@
 - `src/layouts/ContentLayout.astro`: forwards an optional real-translation URL to the base layout.
 - `src/pages/**/*.astro`: identifies pages with real translations and marks the 404 page non-indexable.
 - `tests/e2e/metadata.spec.ts`: verifies production URLs, translation alternates, untranslated pages, and 404 behavior.
-- `tests/unit/deployment.spec.ts`: locks down the GitHub Pages workflow's trigger, action versions, runtime, and permissions.
+- `tests/unit/deployment.spec.js`: locks down the GitHub Pages workflow's trigger, action versions, runtime, and permissions.
 - `.github/workflows/deploy.yml`: builds and deploys `main` with the official Astro GitHub action.
 - `README.md`: records the production URL and automatic deployment behavior.
 
@@ -256,7 +256,7 @@ git commit -m "feat: add production site metadata"
 ### Task 2: Add the official GitHub Pages workflow
 
 **Files:**
-- Create: `tests/unit/deployment.spec.ts`
+- Create: `tests/unit/deployment.spec.js`
 - Create: `.github/workflows/deploy.yml`
 - Modify: `README.md`
 
@@ -266,7 +266,7 @@ git commit -m "feat: add production site metadata"
 
 - [ ] **Step 1: Write a failing workflow contract test**
 
-Create `tests/unit/deployment.spec.ts`:
+Create `tests/unit/deployment.spec.js`:
 
 ```ts
 import { readFileSync } from 'node:fs';
@@ -296,7 +296,7 @@ describe('GitHub Pages deployment workflow', () => {
 Run:
 
 ```bash
-PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH" npx vitest run tests/unit/deployment.spec.ts
+PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH" npx vitest run tests/unit/deployment.spec.js
 ```
 
 Expected: FAIL with `ENOENT` for `.github/workflows/deploy.yml`.
@@ -358,7 +358,7 @@ Append this section to `README.md`:
 Run:
 
 ```bash
-PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH" npx vitest run tests/unit/deployment.spec.ts
+PATH="/Users/wkl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH" npx vitest run tests/unit/deployment.spec.js
 ```
 
 Expected: 1 test PASS.
@@ -366,7 +366,7 @@ Expected: 1 test PASS.
 - [ ] **Step 6: Commit Task 2**
 
 ```bash
-git add .github/workflows/deploy.yml tests/unit/deployment.spec.ts README.md
+git add .github/workflows/deploy.yml tests/unit/deployment.spec.js README.md
 git diff --cached --check
 git commit -m "ci: deploy site to GitHub Pages"
 ```
