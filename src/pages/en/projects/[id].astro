@@ -12,7 +12,19 @@ const chinese = (await getCollection('projects')).find(
   (item) => item.data.lang === 'zh' && item.data.translationKey === entry.data.translationKey,
 );
 const languageHref = chinese ? '/projects/' + chinese.id + '/' : '/';
+const cover = entry.data.cover === '/images/project-fallback.svg' ? undefined : entry.data.cover;
+const coverAlt = cover ? entry.data.title + ' project cover' : undefined;
 ---
-<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.date} locale="en" languageHref={languageHref} alternateHref={chinese ? languageHref : undefined}>
+<ContentLayout
+  title={entry.data.title}
+  summary={entry.data.summary}
+  date={entry.data.date}
+  locale="en"
+  languageHref={languageHref}
+  alternateHref={chinese ? languageHref : undefined}
+  cover={cover}
+  coverAlt={coverAlt}
+  coverFit={entry.data.coverFit}
+>
   <Content />
 </ContentLayout>

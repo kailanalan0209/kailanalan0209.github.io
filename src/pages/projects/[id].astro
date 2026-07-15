@@ -11,7 +11,19 @@ const { Content } = await render(entry);
 const translations = (await getCollection('projects')).filter((item) => item.data.lang === 'en');
 const translated = translations.find((item) => item.data.translationKey === entry.data.translationKey);
 const languageHref = translated ? '/en/projects/' + translated.data.translationKey + '/' : '/en/';
+const cover = entry.data.cover === '/images/project-fallback.svg' ? undefined : entry.data.cover;
+const coverAlt = cover ? entry.data.title + '项目封面' : undefined;
 ---
-<ContentLayout title={entry.data.title} summary={entry.data.summary} date={entry.data.date} locale="zh" languageHref={languageHref} alternateHref={translated ? languageHref : undefined}>
+<ContentLayout
+  title={entry.data.title}
+  summary={entry.data.summary}
+  date={entry.data.date}
+  locale="zh"
+  languageHref={languageHref}
+  alternateHref={translated ? languageHref : undefined}
+  cover={cover}
+  coverAlt={coverAlt}
+  coverFit={entry.data.coverFit}
+>
   <Content />
 </ContentLayout>

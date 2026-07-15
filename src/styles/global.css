@@ -45,6 +45,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .prose { max-width: 48rem; padding-block: 5rem; }
 .prose h1 { font-size: clamp(2.5rem, 7vw, 5rem); line-height: 1; }
 .prose img { max-width: 100%; height: auto; }
+.prose .content-cover { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); object-fit: cover; }
+.prose .content-cover.media-contain { background: #000; object-fit: contain; }
 .site-footer { margin-top: 4rem; border-top: 1px solid var(--line); color: var(--muted); }
 @media (max-width: 48rem) {
   .site-header, .site-footer, .section-heading { align-items: flex-start; flex-direction: column; }

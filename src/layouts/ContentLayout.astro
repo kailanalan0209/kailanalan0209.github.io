@@ -10,14 +10,38 @@ interface Props {
   languageHref?: string;
   alternateHref?: string;
   readingMinutes?: number;
+  cover?: string;
+  coverAlt?: string;
+  coverFit?: 'cover' | 'contain';
 }
-const { title, summary, date, locale, languageHref, alternateHref, readingMinutes } = Astro.props;
+const {
+  title,
+  summary,
+  date,
+  locale,
+  languageHref,
+  alternateHref,
+  readingMinutes,
+  cover,
+  coverAlt,
+  coverFit = 'cover',
+} = Astro.props;
 ---
 <BaseLayout title={title} description={summary} locale={locale} languageHref={languageHref} alternateHref={alternateHref}>
   <article class="prose shell">
     <p class="eyebrow">{formatDate(date, locale)}{readingMinutes ? ' · ' + readingMinutes + (locale === 'zh' ? ' 分钟阅读' : ' min read') : ''}</p>
     <h1>{title}</h1>
     <p class="lede">{summary}</p>
+    {cover && (
+      <img
+        class:list={['content-cover', { 'media-contain': coverFit === 'contain' }]}
+        src={cover}
+        alt={coverAlt ?? ''}
+        width="1600"
+        height="900"
+        decoding="async"
+      />
+    )}
     <slot />
   </article>
 </BaseLayout>
