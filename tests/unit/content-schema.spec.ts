@@ -16,6 +16,25 @@ describe('content schemas', () => {
     });
 
     expect(result.cover).toBe('/images/project-fallback.svg');
+    expect(result.coverFit).toBe('cover');
+  });
+
+  it('accepts contain for a project cover', () => {
+    const result = projectSchema.parse({
+      title: 'Example',
+      summary: 'Summary',
+      role: 'Builder',
+      date: new Date('2026-01-01'),
+      technologies: ['Astro'],
+      cover: '/images/example.png',
+      coverFit: 'contain',
+      status: '已完成产品',
+      outcome: 'Outcome',
+      lang: 'zh',
+      translationKey: 'example',
+    });
+
+    expect(result.coverFit).toBe('contain');
   });
 
   it('defaults an omitted post cover to the article fallback', () => {

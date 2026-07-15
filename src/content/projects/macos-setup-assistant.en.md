@@ -4,7 +4,8 @@ summary: A local workflow for selecting, checking, installing, and reviewing Mac
 role: Product design and development
 date: 2026-07-10
 technologies: [SwiftUI, Shell, APFS]
-cover: /images/project-fallback.svg
+cover: /images/macos-setup-assistant.png
+coverFit: contain
 status: 已完成产品
 outcome: Combined selection, safety checks, installation, verification, and logs in one maintainable workflow.
 lang: en

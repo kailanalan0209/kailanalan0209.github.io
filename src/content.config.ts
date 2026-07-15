@@ -12,6 +12,7 @@ export const projectSchema = z.object({
   date: z.coerce.date(),
   technologies: z.array(z.string().min(1)).min(1),
   cover: z.string().startsWith('/').default('/images/project-fallback.svg'),
+  coverFit: z.enum(['cover', 'contain']).default('cover'),
   status: projectStatus,
   outcome: z.string().min(1),
   lang: language,
