@@ -31,3 +31,9 @@ npm run verify
 隐私规则：绝不直接粘贴源文档；只重写已经批准公开的事实。公开联系邮箱为 `2694421597@qq.com`。
 
 生产构建输出到 `dist/`。
+
+## 线上部署
+
+生产站点：<https://kailanalan0209.github.io>
+
+`main` 分支每次推送后，GitHub Actions 使用 Node.js 24 构建 Astro 静态站点，并将 `dist/` 发布到 GitHub Pages。
