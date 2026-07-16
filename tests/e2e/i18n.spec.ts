@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('English core pages use English headings and lang', async ({ page }) => {
   await page.goto('/en/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Turn curiosity');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Build reliable tools');
   await expect(page.getByText('This content is currently available in Chinese only.')).toBeHidden();
 });
 

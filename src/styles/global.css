@@ -30,8 +30,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .hero { padding-block: clamp(5rem, 12vw, 10rem); }
 .hero h1 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 9vw, 7rem); line-height: .98; letter-spacing: -.05em; }
 .lede { max-width: 44rem; color: var(--muted); font-size: 1.15rem; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.action-link { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; padding: .65rem 1rem; border: 1px solid var(--line); border-radius: 999px; font-weight: 700; overflow-wrap: anywhere; text-decoration: none; }
+.action-link:hover { border-color: var(--accent); }
+.action-link-primary { border-color: var(--accent); background: var(--accent); color: var(--bg); }
 .section { padding-block: 4rem; border-top: 1px solid var(--line); }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.section-intro { max-width: 42rem; margin-block: .35rem 0; color: var(--muted); }
 .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .card { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); transition: transform .2s ease, border-color .2s ease; }
 .card:hover { transform: translateY(-3px); border-color: var(--accent); }
@@ -56,6 +61,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 @media (max-width: 48rem) {
   .site-header, .site-footer, .section-heading { align-items: flex-start; flex-direction: column; }
   .site-header nav { width: 100%; flex-wrap: wrap; justify-content: space-between; }
+  .hero-actions { align-items: stretch; flex-direction: column; }
+  .action-link { width: 100%; }
   .card-grid { grid-template-columns: 1fr; }
   .project-facts { grid-template-columns: 1fr; }
 }

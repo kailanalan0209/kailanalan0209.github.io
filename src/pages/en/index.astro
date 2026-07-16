@@ -14,11 +14,19 @@ const projects = (await getCollection('projects')).filter((entry) => entry.data.
       }
     </script>
     <p class="eyebrow">PERSONAL LAB · DIGITAL GARDEN</p>
-    <h1>Turn curiosity into things people can see and use.</h1>
-    <p class="lede">I learn through real projects, then turn the process into maintainable tools and reusable notes.</p>
+    <h1>Build reliable tools and products from real problems.</h1>
+    <p class="lede">Focused on macOS tools and automation plus API product practice, with maintainable implementations and explicit safety boundaries.</p>
+    <div class="hero-actions" aria-label="Primary actions">
+      <a class="action-link action-link-primary" href={'mailto:' + site.email}>Email · {site.email}</a>
+      <a class="action-link" href="/en/projects/">View projects</a>
+    </div>
   </section>
-  <section class="section shell"><h2>Selected projects</h2><div class="card-grid">
-    {projects.map((project) => <ProjectCard project={project} locale="en" href={'/en/projects/' + project.data.translationKey + '/'} headingLevel={3} />)}
-  </div></section>
-  <section class="section shell"><h2>More</h2><p><a href="/en/about/">About WKL and resume summary</a></p></section>
+  <section class="section shell">
+    <div class="section-heading"><div><h2>Selected projects</h2><p class="section-intro">Product work that follows real problems through safety boundaries and maintainable implementation.</p></div><a href="/en/projects/">View all</a></div>
+    <div class="card-grid">
+      {projects.map((project) => <ProjectCard project={project} locale="en" href={'/en/projects/' + project.data.translationKey + '/'} headingLevel={3} />)}
+    </div>
+  </section>
+  <section class="section shell"><h2>Notes in Chinese</h2><p>Long-form notes are currently published in Chinese.</p><p><a href="/posts/">Browse Chinese notes</a></p></section>
+  <section class="section shell"><h2>Experience</h2><p>See current practice areas and a concise background summary.</p><p><a href="/en/about/">Read the experience summary</a></p></section>
 </BaseLayout>
