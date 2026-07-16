@@ -52,6 +52,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .prose img { max-width: 100%; height: auto; }
 .prose .content-cover { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); object-fit: cover; }
 .prose .content-cover.media-contain { background: #000; object-fit: contain; }
+.capability-grid, .evidence-list { display: grid; gap: 1rem; padding: 0; list-style: none; }
+.capability-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.evidence-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.capability-grid li, .evidence-list li { padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.capability-grid h3, .evidence-list h3 { margin-top: 0; }
+.workflow-list { display: grid; gap: .75rem; padding-left: 1.5rem; }
+.workflow-list li { padding-left: .5rem; }
 .project-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-block: 2rem; padding: 1px; overflow: hidden; border-radius: var(--radius); background: var(--line); }
 .project-facts > div { padding: 1rem; background: var(--surface); }
 .project-facts dt { color: var(--accent); font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
@@ -64,5 +71,6 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
   .hero-actions { align-items: stretch; flex-direction: column; }
   .action-link { width: 100%; }
   .card-grid { grid-template-columns: 1fr; }
+  .capability-grid, .evidence-list { grid-template-columns: 1fr; }
   .project-facts { grid-template-columns: 1fr; }
 }

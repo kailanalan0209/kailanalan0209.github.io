@@ -1,11 +1,33 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../lib/site';
+const projects = (await getCollection('projects')).filter((entry) => entry.data.lang === 'en' && entry.data.featured);
 ---
-<BaseLayout title="About WKL" description="Current interests and resume summary." locale="en" languageHref="/about/" alternateHref="/about/">
+<BaseLayout title="About WKL" description="WKL's capabilities, working method, and representative projects." locale="en" languageHref="/about/" alternateHref="/about/">
   <article class="prose shell"><p class="eyebrow">ABOUT</p><h1>About WKL</h1>
-    <p class="lede">I learn by turning real problems into maintainable tools and reusable notes.</p>
-    <h2>Current practice</h2><ul><li>SwiftUI and macOS tools</li><li>Shell automation and safety boundaries</li><li>Node.js services and API integration</li><li>Data research and product concepts</li></ul>
-    <h2>Resume summary</h2><p>Computer science learner working across software tools, data research, and product concepts.</p>
-    <h2>Contact</h2><p><a href="mailto:2694421597@qq.com">2694421597@qq.com</a></p>
+    <p class="lede">I focus on macOS tools and automation plus API product practice, turning real problems into maintainable work with explicit boundaries and reusable records.</p>
+    <h2>Capabilities</h2>
+    <ul class="capability-grid">
+      <li><h3>Tools and automation</h3><p>SwiftUI, Shell, macOS workflows, and installation flows.</p></li>
+      <li><h3>APIs and local data</h3><p>Node.js, HTTP APIs, SQLite, and local state management.</p></li>
+      <li><h3>Safety boundaries and maintainability</h3><p>Input validation, privacy boundaries, rollback paths, tests, and documentation.</p></li>
+    </ul>
+    <h2>How I work</h2>
+    <ol class="workflow-list">
+      <li>Start from a real problem and its usage path.</li>
+      <li>Define safety, privacy, and failure boundaries first.</li>
+      <li>Build a maintainable, testable, and documented tool or product.</li>
+    </ol>
+    <h2>Representative projects</h2>
+    <ul class="evidence-list">
+      {projects.map((project) => <li><h3><a href={'/en/projects/' + project.data.translationKey + '/'}>{project.data.title}</a></h3><p>{project.data.outcome}</p></li>)}
+    </ul>
+    <h2>Contact</h2>
+    <p>If this work relates to a problem you are solving, you can reach me directly by email.</p>
+    <div class="hero-actions" aria-label="Contact and projects">
+      <a class="action-link action-link-primary" href={'mailto:' + site.email}>Email · {site.email}</a>
+      <a class="action-link" href="/en/projects/">View all projects</a>
+    </div>
   </article>
 </BaseLayout>
