@@ -79,3 +79,14 @@ test('primary navigation links do not show underlines', async ({ page }) => {
     await expect(link).toHaveCSS('text-decoration-line', 'none');
   }
 });
+
+test('project and post card titles do not show underlines', async ({ page }) => {
+  for (const path of ['/projects/', '/posts/']) {
+    await page.goto(path);
+    const titleLinks = page.locator('.card h2 a, .card h3 a');
+    await expect(titleLinks).toHaveCount(2);
+    for (const link of await titleLinks.all()) {
+      await expect(link).toHaveCSS('text-decoration-line', 'none');
+    }
+  }
+});

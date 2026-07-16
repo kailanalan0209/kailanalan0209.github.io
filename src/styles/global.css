@@ -45,6 +45,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .card img.media-contain { background: #000; object-fit: contain; }
 .card-body { padding: 1.25rem; }
 .card h2, .card h3 { margin-block: .35rem; }
+.card h2 a, .card h3 a { text-decoration: none; }
 .tags { display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; list-style: none; color: var(--muted); }
 .experience-list { display: grid; gap: 1rem; padding: 0; list-style: none; }
 .experience-list li { padding: 1.25rem; border-left: 3px solid var(--accent); background: var(--surface); }
