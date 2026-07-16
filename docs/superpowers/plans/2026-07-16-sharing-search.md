@@ -417,7 +417,7 @@ sips -g pixelWidth -g pixelHeight public/images/social-default.png
 git diff --check origin/main..HEAD
 ```
 
-Expected: 28 unit tests and 54 E2E tests pass; Astro has no diagnostics; 15 static routes build; audits report 0 vulnerabilities; privacy and diff checks pass; social PNG is 1200×630.
+Expected: 28 unit tests and 54 E2E tests pass; Astro has no diagnostics; 14 HTML pages plus the sitemap build; audits report 0 vulnerabilities; privacy and diff checks pass; social PNG is 1200×630.
 
 - [ ] **Step 2: Inspect the social image**
 
