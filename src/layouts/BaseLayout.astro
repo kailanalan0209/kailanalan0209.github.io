@@ -61,6 +61,7 @@ const serializedStructuredData = structuredData
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    {Astro.url.pathname === '/' && <meta name="google-site-verification" content="HLPMEjQT6-s0H9wdt0RMeCsGBQc59zFEIsTXIsuGbkU" />}
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}

@@ -2,6 +2,12 @@ import { expect, test } from '@playwright/test';
 
 const origin = 'https://kailanalan0209.github.io';
 
+test('homepage exposes the Google Search Console verification marker', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('meta[name="google-site-verification"]'))
+    .toHaveAttribute('content', 'HLPMEjQT6-s0H9wdt0RMeCsGBQc59zFEIsTXIsuGbkU');
+});
+
 test('indexable pages expose absolute production metadata', async ({ page }) => {
   for (const path of ['/', '/posts/api-key-privacy/']) {
     await page.goto(path);
