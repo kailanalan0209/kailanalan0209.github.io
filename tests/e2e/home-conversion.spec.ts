@@ -45,6 +45,17 @@ test('English home links to Chinese notes honestly and to English experience', a
   await expect(experience.locator('.experience-list')).toHaveCount(0);
 });
 
+test('Chinese desktop hero avoids an orphaned final title line', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const lineWidths = await page.locator('.hero h1').evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return [...range.getClientRects()].map((rect) => rect.width);
+  });
+  expect(lineWidths.at(-1)! / Math.max(...lineWidths)).toBeGreaterThan(0.4);
+});
+
 for (const path of ['/', '/en/']) {
   test(`${path} actions fit a 390px viewport and remain focusable`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

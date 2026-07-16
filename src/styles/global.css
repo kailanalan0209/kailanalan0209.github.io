@@ -28,7 +28,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .wordmark { font-weight: 800; text-decoration: none; letter-spacing: .08em; }
 .wordmark span, .eyebrow { color: var(--accent); }
 .hero { padding-block: clamp(5rem, 12vw, 10rem); }
-.hero h1 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 9vw, 7rem); line-height: .98; letter-spacing: -.05em; }
+.hero h1 { max-width: 16ch; margin: 0; font-size: clamp(3rem, 9vw, 7rem); line-height: .98; letter-spacing: -.05em; }
 .lede { max-width: 44rem; color: var(--muted); font-size: 1.15rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
 .action-link { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; padding: .65rem 1rem; border: 1px solid var(--line); border-radius: 999px; font-weight: 700; overflow-wrap: anywhere; text-decoration: none; }
