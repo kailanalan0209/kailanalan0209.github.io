@@ -34,7 +34,7 @@
 输出内容包括：
 
 - `og:url`、`og:type=website`、`og:title`、`og:description`；
-- `og:image`、`og:image:width=1200`、`og:image:height=630`、`og:image:alt`；
+- `og:image` 与 `og:image:alt`；使用默认品牌图时额外输出准确的 `og:image:width=1200` 和 `og:image:height=630`，项目原图尺寸不同，因此不声明不准确的尺寸；
 - `og:locale`，有真实翻译时输出 `og:locale:alternate`；
 - `twitter:card=summary_large_image`、`twitter:title`、`twitter:description`、`twitter:image` 和 `twitter:image:alt`；
 - SVG favicon link。
