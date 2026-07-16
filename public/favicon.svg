@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="WKL">
+  <rect width="64" height="64" rx="14" fill="#151310"/>
+  <text x="8" y="41" fill="#f4ecdf" font-family="Arial, sans-serif" font-size="25" font-weight="800">WKL</text>
+  <circle cx="54" cy="13" r="6" fill="#ff8a3d"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">WKL social sharing card</title>
+  <desc id="description">WKL wordmark with tools, automation, and API products positioning.</desc>
+  <rect width="1200" height="630" fill="#151310"/>
+  <circle cx="1040" cy="126" r="72" fill="#ff8a3d"/>
+  <path d="M88 472H1112" stroke="#3b332b" stroke-width="2"/>
+  <text x="88" y="304" fill="#f4ecdf" font-family="Inter, Arial, sans-serif" font-size="188" font-weight="800" letter-spacing="-8">WKL</text>
+  <text x="92" y="414" fill="#ff8a3d" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="4">TOOLS · AUTOMATION · API PRODUCTS</text>
+  <text x="92" y="540" fill="#b9aa98" font-family="Inter, Arial, sans-serif" font-size="26">kailanalan0209.github.io</text>
+</svg>

@@ -10,6 +10,8 @@ interface Props {
   languageHref?: string;
   alternateHref?: string;
   indexable?: boolean;
+  image?: string;
+  imageAlt?: string;
 }
 const {
   title,
@@ -18,12 +20,40 @@ const {
   languageHref = locale === 'zh' ? '/en/' : '/',
   alternateHref,
   indexable = true,
+  image,
+  imageAlt,
 } = Astro.props;
 const documentTitle = title === site.name ? title : title + ' · ' + site.name;
 const canonicalUrl = indexable && Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 const alternateUrl = canonicalUrl && alternateHref ? new URL(alternateHref, Astro.site) : undefined;
 const currentHreflang = locale === 'zh' ? 'zh-CN' : 'en';
 const alternateHreflang = locale === 'zh' ? 'en' : 'zh-CN';
+const language = locale === 'zh' ? 'zh-CN' : 'en';
+const openGraphLocale = locale === 'zh' ? 'zh_CN' : 'en_US';
+const alternateOpenGraphLocale = locale === 'zh' ? 'en_US' : 'zh_CN';
+const socialImagePath = image ?? '/images/social-default.png';
+const usesDefaultSocialImage = image === undefined;
+const socialImageUrl = canonicalUrl && Astro.site ? new URL(socialImagePath, Astro.site) : undefined;
+const socialImageAlt = imageAlt ?? (locale === 'zh' ? 'WKL：工具、自动化与 API 产品实践' : 'WKL: tools, automation, and API product practice');
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '/en/';
+const structuredData = canonicalUrl && Astro.site ? {
+  '@context': 'https://schema.org',
+  '@type': isHome ? 'WebSite' : 'WebPage',
+  name: documentTitle,
+  description,
+  url: canonicalUrl.href,
+  inLanguage: language,
+  ...(!isHome && {
+    isPartOf: {
+      '@type': 'WebSite',
+      name: site.name,
+      url: new URL('/', Astro.site).href,
+    },
+  }),
+} : undefined;
+const serializedStructuredData = structuredData
+  ? JSON.stringify(structuredData).replaceAll('<', '\\u003c')
+  : undefined;
 ---
 <!doctype html>
 <html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
@@ -32,6 +62,7 @@ const alternateHreflang = locale === 'zh' ? 'en' : 'zh-CN';
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     {alternateUrl && <link rel="alternate" hreflang={currentHreflang} href={canonicalUrl} />}
     {alternateUrl && <link rel="alternate" hreflang={alternateHreflang} href={alternateUrl} />}
@@ -39,6 +70,18 @@ const alternateHreflang = locale === 'zh' ? 'en' : 'zh-CN';
     {canonicalUrl && <meta property="og:type" content="website" />}
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
+    {canonicalUrl && <meta property="og:locale" content={openGraphLocale} />}
+    {alternateUrl && <meta property="og:locale:alternate" content={alternateOpenGraphLocale} />}
+    {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
+    {socialImageUrl && usesDefaultSocialImage && <meta property="og:image:width" content="1200" />}
+    {socialImageUrl && usesDefaultSocialImage && <meta property="og:image:height" content="630" />}
+    {socialImageUrl && <meta property="og:image:alt" content={socialImageAlt} />}
+    {socialImageUrl && <meta name="twitter:card" content="summary_large_image" />}
+    {socialImageUrl && <meta name="twitter:title" content={documentTitle} />}
+    {socialImageUrl && <meta name="twitter:description" content={description} />}
+    {socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
+    {socialImageUrl && <meta name="twitter:image:alt" content={socialImageAlt} />}
+    {serializedStructuredData && <script type="application/ld+json" is:inline set:html={serializedStructuredData}></script>}
     <title>{documentTitle}</title>
   </head>
   <body>
