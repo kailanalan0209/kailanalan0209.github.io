@@ -69,3 +69,13 @@ test('primary navigation identifies only the current static section', async ({ p
     await expect(page.getByRole('navigation').locator('a[aria-current="page"]')).toHaveCount(1);
   }
 });
+
+test('primary navigation links do not show underlines', async ({ page }) => {
+  await page.goto('/');
+
+  const links = page.getByRole('navigation').getByRole('link');
+  await expect(links).toHaveCount(4);
+  for (const link of await links.all()) {
+    await expect(link).toHaveCSS('text-decoration-line', 'none');
+  }
+});

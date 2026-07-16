@@ -24,6 +24,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 
 .site-header, .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
 .site-header nav { display: flex; align-items: center; gap: 1rem; }
+.site-header nav a { text-decoration: none; }
 .site-header nav a[aria-current="page"] { color: var(--accent); }
 .wordmark { font-weight: 800; text-decoration: none; letter-spacing: .08em; }
 .wordmark span, .eyebrow { color: var(--accent); }
