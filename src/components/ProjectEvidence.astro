@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  locale: 'zh' | 'en';
+}
+
+const { project, locale } = Astro.props;
+const { evidence } = project.data;
+const copy = locale === 'zh'
+  ? { heading: '验证记录', version: '版本', verifiedAt: '验证日期', environment: '验证环境', checks: '已通过检查', disclosure: '公开边界：' }
+  : { heading: 'Verification Record', version: 'Version', verifiedAt: 'Verified', environment: 'Environment', checks: 'Checks passed', disclosure: 'Disclosure:' };
+---
+<section class="project-evidence" aria-labelledby="project-evidence-title">
+  <h2 id="project-evidence-title">{copy.heading}</h2>
+  <dl class="project-evidence-facts">
+    <div><dt>{copy.version}</dt><dd data-evidence="version">{evidence.version}</dd></div>
+    <div><dt>{copy.verifiedAt}</dt><dd><time datetime={evidence.verifiedAt}>{evidence.verifiedAt}</time></dd></div>
+    <div><dt>{copy.environment}</dt><dd data-evidence="environment">{evidence.environment}</dd></div>
+  </dl>
+  <h3>{copy.checks}</h3>
+  <ul class="project-evidence-checks">
+    {evidence.checks.map((check) => <li>{check}</li>)}
+  </ul>
+  <p class="project-evidence-disclosure"><strong>{copy.disclosure}</strong> {evidence.disclosure}</p>
+</section>

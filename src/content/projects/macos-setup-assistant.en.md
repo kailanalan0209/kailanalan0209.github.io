@@ -11,6 +11,16 @@ outcome: Combined selection, safety checks, installation, verification, and logs
 lang: en
 translationKey: macos-setup-assistant
 featured: true
+evidence:
+  version: '2.4'
+  verifiedAt: '2026-07-16'
+  environment: macOS 27.0 · Apple silicon
+  checks:
+    - Safety preflight completed in check-only mode.
+    - The full local dry run completed without installing software.
+    - Checksum manifest verification passed.
+    - 6 automated regression tests passed, covering updates, logs, progress, and Swift concurrency.
+  disclosure: This record was verified locally by the project owner; source, internal configuration, third-party packages, and executables remain private, with no downloads provided. It is not a third-party security certification.
 ---
 
 ## Background

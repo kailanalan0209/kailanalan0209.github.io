@@ -11,6 +11,16 @@ outcome: Summarized balance and local usage without exposing API keys to the bro
 lang: en
 translationKey: api-pulse
 featured: true
+evidence:
+  version: 1.0.0
+  verifiedAt: '2026-07-16'
+  environment: macOS 27.0 · Apple silicon · Node.js 24
+  checks:
+    - Node.js syntax checks passed.
+    - The local interface loaded and the public asset credential-pattern scan passed.
+    - Anonymous dashboard access was denied while local credential loading was disabled.
+    - The session-clear response used HttpOnly and SameSite=Strict cookie boundaries.
+  disclosure: This record was verified locally by the project owner without real API keys; source and internal configuration remain private, with no downloads provided. It is not a third-party security certification.
 ---
 
 ## Background

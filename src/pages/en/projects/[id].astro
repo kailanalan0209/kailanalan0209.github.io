@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import ContentLayout from '../../../layouts/ContentLayout.astro';
+import ProjectEvidence from '../../../components/ProjectEvidence.astro';
 import ProjectFacts from '../../../components/ProjectFacts.astro';
 export async function getStaticPaths() {
   const entries = (await getCollection('projects')).filter((entry) => entry.data.lang === 'en');
@@ -28,5 +29,6 @@ const coverAlt = cover ? entry.data.title + ' project cover' : undefined;
   coverFit={entry.data.coverFit}
 >
   <ProjectFacts project={entry} locale="en" />
+  <ProjectEvidence project={entry} locale="en" />
   <Content />
 </ContentLayout>

@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { experienceSchema, postSchema, projectSchema } from '../../src/content.config';
 
+const validEvidence = {
+  version: '1.0.0',
+  verifiedAt: '2026-07-16',
+  environment: 'macOS on Apple silicon',
+  checks: ['Syntax check passed'],
+  disclosure: 'Owner-verified record; source and internal configuration remain private.',
+};
+
 describe('content schemas', () => {
   it('defaults an omitted project cover to the project fallback', () => {
     const result = projectSchema.parse({
@@ -13,6 +21,7 @@ describe('content schemas', () => {
       outcome: 'Outcome',
       lang: 'zh',
       translationKey: 'example',
+      evidence: validEvidence,
     });
 
     expect(result.cover).toBe('/images/project-fallback.svg');
@@ -32,6 +41,7 @@ describe('content schemas', () => {
       outcome: 'Outcome',
       lang: 'zh',
       translationKey: 'example',
+      evidence: validEvidence,
     });
 
     expect(result.coverFit).toBe('contain');
@@ -66,6 +76,66 @@ describe('content schemas', () => {
       featured: true,
     });
     expect(result.success).toBe(false);
+  });
+
+  it('requires verification evidence for every project', () => {
+    const result = projectSchema.safeParse({
+      title: 'Example',
+      summary: 'Summary',
+      role: 'Builder',
+      date: new Date('2026-01-01'),
+      technologies: ['Astro'],
+      status: '已完成产品',
+      outcome: 'Outcome',
+      lang: 'zh',
+      translationKey: 'example',
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it('preserves a complete project verification record', () => {
+    const result = projectSchema.parse({
+      title: 'Example',
+      summary: 'Summary',
+      role: 'Builder',
+      date: new Date('2026-01-01'),
+      technologies: ['Astro'],
+      status: '已完成产品',
+      outcome: 'Outcome',
+      lang: 'zh',
+      translationKey: 'example',
+      evidence: validEvidence,
+    });
+
+    expect(result.evidence).toEqual(validEvidence);
+  });
+
+  it('rejects an invalid verification date or an empty check list', () => {
+    const baseProject = {
+      title: 'Example',
+      summary: 'Summary',
+      role: 'Builder',
+      date: new Date('2026-01-01'),
+      technologies: ['Astro'],
+      status: '已完成产品',
+      outcome: 'Outcome',
+      lang: 'zh',
+      translationKey: 'example',
+    };
+
+    expect(projectSchema.safeParse({
+      ...baseProject,
+      evidence: { ...validEvidence, verifiedAt: '16/07/2026' },
+    }).success).toBe(false);
+    expect(projectSchema.safeParse({
+      ...baseProject,
+      evidence: { ...validEvidence, verifiedAt: '2026-13-40' },
+    }).success).toBe(false);
+    expect(projectSchema.safeParse({
+      ...baseProject,
+      evidence: { ...validEvidence, checks: [] },
+    }).success).toBe(false);
   });
 
   it('accepts a Chinese post without an English translation', () => {

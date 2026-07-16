@@ -90,7 +90,7 @@ for (const project of [
 ] as const) {
   test(project.path + ' presents a structured case study', async ({ page }) => {
     await page.goto(project.path);
-    await expect(page.locator('main article h2')).toHaveText([...project.headings]);
+    await expect(page.locator('main article > .project-evidence ~ h2')).toHaveText([...project.headings]);
     for (const phrase of project.evidence) {
       await expect(page.locator('main article')).toContainText(phrase);
     }

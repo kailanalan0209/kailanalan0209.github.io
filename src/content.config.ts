@@ -4,6 +4,13 @@ import { z } from 'astro/zod';
 
 const language = z.enum(['zh', 'en']);
 const projectStatus = z.enum(['已完成产品', '团队项目', '概念设计']);
+const projectEvidence = z.object({
+  version: z.string().min(1),
+  verifiedAt: z.iso.date(),
+  environment: z.string().min(1),
+  checks: z.array(z.string().min(1)).min(1),
+  disclosure: z.string().min(1),
+});
 
 export const projectSchema = z.object({
   title: z.string().min(1),
@@ -18,6 +25,7 @@ export const projectSchema = z.object({
   lang: language,
   translationKey: z.string().min(1),
   featured: z.boolean().default(false),
+  evidence: projectEvidence,
 });
 
 export const postSchema = z.object({
