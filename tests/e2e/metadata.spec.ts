@@ -37,6 +37,14 @@ test('project details use their own cover in social metadata', async ({ page }) 
   }
 });
 
+test('photography details use their own cover in social metadata', async ({ page }) => {
+  await page.goto('/works/aviation/');
+  await expect(page.locator('meta[property="og:image"]'))
+    .toHaveAttribute('content', origin + '/images/work/aviation/01.jpg');
+  await expect(page.locator('meta[property="og:image:alt"]'))
+    .toHaveAttribute('content', '航空掠影作品集封面');
+});
+
 test('indexable pages expose parseable localized JSON-LD', async ({ page }) => {
   for (const [path, type, language] of [
     ['/', 'WebSite', 'zh-CN'],

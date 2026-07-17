@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import WorkCard from '../../components/WorkCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const works = (await getCollection('works'))
+  .filter((entry) => entry.data.lang === 'zh')
+  .sort((a, b) => b.data.year - a.data.year);
+---
+<BaseLayout title="摄影与影像" description="WKL 的摄影与影像作品集。" locale="zh" languageHref="/en/works/" alternateHref="/en/works/">
+  <section class="work-index shell">
+    <p class="eyebrow">VISUAL WORK</p>
+    <h1>摄影与影像</h1>
+    <p class="lede">视觉中国签约摄影师。以系列整理天空、地景与城市速度，视频作品将在完成归档后陆续加入。</p>
+    <div class="work-grid">
+      {works.map((work) => <WorkCard work={work} href={'/works/' + work.data.translationKey + '/'} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import WorkCard from '../../../components/WorkCard.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+const works = (await getCollection('works'))
+  .filter((entry) => entry.data.lang === 'en')
+  .sort((a, b) => b.data.year - a.data.year);
+---
+<BaseLayout title="Photography & Film" description="WKL's photography and moving-image portfolio." locale="en" languageHref="/works/" alternateHref="/works/">
+  <section class="work-index shell">
+    <p class="eyebrow">VISUAL WORK</p>
+    <h1>Photography & Film</h1>
+    <p class="lede">A Visual China contracted photographer presenting focused series on aviation, landscape, and urban motion. Film work will follow as the archive is prepared.</p>
+    <div class="work-grid">
+      {works.map((work) => <WorkCard work={work} locale="en" href={'/en/works/' + work.data.translationKey + '/'} />)}
+    </div>
+  </section>
+</BaseLayout>

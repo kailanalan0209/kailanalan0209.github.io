@@ -17,9 +17,11 @@ test('sitemap exposes real static and collection-backed routes only', async ({ r
   expect(response.headers()['content-type']).toContain('application/xml');
   const xml = await response.text();
   for (const path of [
-    '/', '/about/', '/projects/', '/posts/', '/en/', '/en/about/', '/en/projects/',
+    '/', '/about/', '/projects/', '/works/', '/posts/', '/en/', '/en/about/', '/en/projects/', '/en/works/',
     '/projects/api-pulse/', '/projects/macos-setup-assistant/',
     '/en/projects/api-pulse/', '/en/projects/macos-setup-assistant/',
+    '/works/aviation/', '/works/aerial/', '/works/urban-rail/',
+    '/en/works/aviation/', '/en/works/aerial/', '/en/works/urban-rail/',
     '/posts/api-key-privacy/', '/posts/macos-setup-workflow/',
   ]) {
     expect(xml).toContain(`<loc>${origin}${path}</loc>`);

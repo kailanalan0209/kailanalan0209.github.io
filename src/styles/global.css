@@ -61,6 +61,24 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
 .capability-grid h3, .evidence-list h3 { margin-top: 0; }
 .workflow-list { display: grid; gap: .75rem; padding-left: 1.5rem; }
 .workflow-list li { padding-left: .5rem; }
+.credential { display: inline-flex; padding: .4rem .7rem; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); font-weight: 700; }
+.work-index { padding-block: 5rem; }
+.work-index h1, .work-detail h1 { margin-block: .25rem; font-size: clamp(2.75rem, 7vw, 5.5rem); line-height: 1; letter-spacing: -.04em; }
+.work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+.work-card { overflow: hidden; border-radius: var(--radius); background: var(--surface); }
+.work-card-media { display: block; overflow: hidden; aspect-ratio: 4 / 3; }
+.work-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+.work-card:hover img { transform: scale(1.02); }
+.work-card-body { padding: 1.25rem; }
+.work-card h2 { margin-block: .35rem; }
+.work-card h2 a { text-decoration: none; }
+.work-card p:last-child { margin-bottom: 0; color: var(--muted); }
+.work-detail { padding-block: 5rem; }
+.work-detail header { max-width: 48rem; margin-bottom: 3rem; }
+.work-gallery { columns: 2 24rem; column-gap: 1rem; }
+.work-gallery figure { margin: 0 0 1rem; break-inside: avoid; }
+.work-gallery a { display: block; }
+.work-gallery img, .work-gallery video { display: block; width: 100%; height: auto; border-radius: .5rem; background: #0b0a08; }
 .project-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-block: 2rem; padding: 1px; overflow: hidden; border-radius: var(--radius); background: var(--line); }
 .project-facts > div { padding: 1rem; background: var(--surface); }
 .project-facts dt { color: var(--accent); font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
@@ -81,6 +99,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outlin
   .hero-actions { align-items: stretch; flex-direction: column; }
   .action-link { width: 100%; }
   .card-grid { grid-template-columns: 1fr; }
+  .work-grid { grid-template-columns: 1fr; }
+  .work-gallery { columns: 1; }
   .capability-grid, .evidence-list { grid-template-columns: 1fr; }
   .project-facts { grid-template-columns: 1fr; }
   .project-evidence-facts { grid-template-columns: 1fr; }

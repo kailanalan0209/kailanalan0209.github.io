@@ -4,8 +4,8 @@ import { getCollection } from 'astro:content';
 export const prerender = true;
 
 const staticPaths = [
-  '/', '/about/', '/projects/', '/posts/',
-  '/en/', '/en/about/', '/en/projects/',
+  '/', '/about/', '/projects/', '/works/', '/posts/',
+  '/en/', '/en/about/', '/en/projects/', '/en/works/',
 ];
 
 function escapeXml(value: string): string {
@@ -22,6 +22,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const projects = await getCollection('projects');
   const posts = await getCollection('posts');
+  const works = await getCollection('works');
   const paths = new Set(staticPaths);
 
   for (const project of projects) {
@@ -31,6 +32,11 @@ export const GET: APIRoute = async ({ site }) => {
   }
   for (const post of posts) {
     if (post.data.lang === 'zh' && !post.data.draft) paths.add(`/posts/${post.id}/`);
+  }
+  for (const work of works) {
+    paths.add(work.data.lang === 'zh'
+      ? `/works/${work.data.translationKey}/`
+      : `/en/works/${work.data.translationKey}/`);
   }
 
   const urls = [...paths]

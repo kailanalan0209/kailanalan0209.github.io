@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getWorkCategoryLabel, getWorkPreviewSrc } from '../lib/work';
+interface Props { work: CollectionEntry<'works'>; href: string; locale?: 'zh' | 'en'; }
+const { work, href, locale = 'zh' } = Astro.props;
+const category = getWorkCategoryLabel(work.data.category, locale);
+const cover = work.data.media.find((media) =>
+  media.type === 'image' && media.src === work.data.cover
+);
+const mediaLabel = locale === 'zh'
+  ? `查看${work.data.title}作品集`
+  : `View the ${work.data.title} portfolio`;
+---
+<article class="work-card">
+  <a class="work-card-media" href={href} aria-label={mediaLabel}>
+    <img
+      src={getWorkPreviewSrc(work.data.cover)}
+      alt={work.data.title + (locale === 'zh' ? '作品集封面' : ' portfolio cover')}
+      width={cover?.width ?? 1600}
+      height={cover?.height ?? 1200}
+      loading="lazy"
+      decoding="async"
+    />
+  </a>
+  <div class="work-card-body">
+    <p class="eyebrow">{category} · {work.data.year}</p>
+    <h2><a href={href}>{work.data.title}</a></h2>
+    <p>{work.data.summary}</p>
+  </div>
+</article>

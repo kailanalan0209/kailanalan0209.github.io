@@ -1,0 +1,37 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getWorkCategoryLabel, getWorkPreviewSrc } from '../../../lib/work';
+
+export async function getStaticPaths() {
+  const works = (await getCollection('works')).filter((entry) => entry.data.lang === 'en');
+  return works.map((work) => ({ params: { id: work.data.translationKey }, props: { work } }));
+}
+
+interface Props { work: CollectionEntry<'works'>; }
+const { work } = Astro.props;
+const category = getWorkCategoryLabel(work.data.category, 'en');
+---
+<BaseLayout
+  title={work.data.title}
+  description={work.data.summary}
+  locale="en"
+  languageHref={'/works/' + work.data.translationKey + '/'}
+  alternateHref={'/works/' + work.data.translationKey + '/'}
+  image={work.data.cover}
+  imageAlt={work.data.title + ' portfolio cover'}
+>
+  <article class="work-detail shell">
+    <header>
+      <p class="eyebrow">{category} · {work.data.year}</p>
+      <h1>{work.data.title}</h1>
+      <p class="lede">{work.data.summary}</p>
+    </header>
+    <div class="work-gallery">
+      {work.data.media.map((media) => media.type === 'image'
+        ? <figure><a href={media.src} target="_blank" rel="noreferrer"><img src={getWorkPreviewSrc(media.src)} srcset={`${getWorkPreviewSrc(media.src)} 1280w, ${media.src} 2400w`} sizes="(max-width: 48rem) calc(100vw - 2rem), 50vw" alt={media.alt} width={media.width} height={media.height} loading="lazy" decoding="async" /></a></figure>
+        : <figure><video controls preload="metadata" poster={media.poster} width={media.width} height={media.height} aria-label={media.alt}><source src={media.src} /></video></figure>
+      )}
+    </div>
+  </article>
+</BaseLayout>

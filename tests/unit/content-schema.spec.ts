@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import * as contentConfig from '../../src/content.config';
 import { experienceSchema, postSchema, projectSchema } from '../../src/content.config';
 
 const validEvidence = {
@@ -161,5 +162,32 @@ describe('content schemas', () => {
       lang: 'zh',
       translationKey: 'contest',
     }).success).toBe(false);
+  });
+
+  it('accepts a photography series with web gallery media', () => {
+    expect(contentConfig).toHaveProperty('workSchema');
+    const workSchema = (contentConfig as Record<string, any>).workSchema;
+    const result = workSchema.parse({
+      title: '航空',
+      summary: '飞行器与天空。',
+      category: 'photography',
+      year: 2024,
+      cover: '/images/work/aviation/cover.jpg',
+      media: [
+        {
+          type: 'image',
+          src: '/images/work/aviation/01.jpg',
+          alt: '战机飞越云层',
+          width: 2400,
+          height: 1600,
+        },
+      ],
+      lang: 'zh',
+      translationKey: 'aviation',
+      featured: true,
+    });
+
+    expect(result.media).toHaveLength(1);
+    expect(result.media[0].type).toBe('image');
   });
 });

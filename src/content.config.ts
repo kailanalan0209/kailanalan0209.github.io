@@ -50,6 +50,36 @@ export const experienceSchema = z.object({
   translationKey: z.string().min(1),
 });
 
+const workMediaSchema = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('image'),
+    src: z.string().startsWith('/'),
+    alt: z.string().min(1),
+    width: z.number().int().positive(),
+    height: z.number().int().positive(),
+  }),
+  z.object({
+    type: z.literal('video'),
+    src: z.string().startsWith('/'),
+    poster: z.string().startsWith('/'),
+    alt: z.string().min(1),
+    width: z.number().int().positive(),
+    height: z.number().int().positive(),
+  }),
+]);
+
+export const workSchema = z.object({
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  category: z.enum(['photography', 'video']),
+  year: z.number().int().min(2000),
+  cover: z.string().startsWith('/'),
+  media: z.array(workMediaSchema).min(1),
+  lang: language,
+  translationKey: z.string().min(1),
+  featured: z.boolean().default(false),
+});
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: projectSchema,
@@ -62,5 +92,9 @@ const experience = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/experience' }),
   schema: experienceSchema,
 });
+const works = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/works' }),
+  schema: workSchema,
+});
 
-export const collections = { projects, posts, experience };
+export const collections = { projects, posts, experience, works };

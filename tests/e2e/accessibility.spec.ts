@@ -58,9 +58,11 @@ test('card images use deferred asynchronous decoding', async ({ page }) => {
 test('primary navigation identifies only the current static section', async ({ page }) => {
   for (const [path, name] of [
     ['/projects/', '项目'],
+    ['/works/', '作品'],
     ['/posts/api-key-privacy/', '文章'],
     ['/about/', '关于'],
     ['/en/projects/api-pulse/', 'Projects'],
+    ['/en/works/', 'Work'],
     ['/en/about/', 'About'],
   ] as const) {
     await page.goto(path);
@@ -74,7 +76,7 @@ test('primary navigation links do not show underlines', async ({ page }) => {
   await page.goto('/');
 
   const links = page.getByRole('navigation').getByRole('link');
-  await expect(links).toHaveCount(4);
+  await expect(links).toHaveCount(5);
   for (const link of await links.all()) {
     await expect(link).toHaveCSS('text-decoration-line', 'none');
   }
