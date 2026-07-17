@@ -13,6 +13,7 @@
     "build": "astro build",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
+    "catalog:media": "node scripts/build-media-catalog.mjs \"$HOME/Pictures\" media-catalog",
     "audit": "node scripts/audit-build.mjs",
     "verify": "npm run test:unit && npm run check && npm run build && npm run audit && npm run test:e2e"
   },

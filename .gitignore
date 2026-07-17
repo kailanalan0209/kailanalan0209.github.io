@@ -3,6 +3,7 @@ dist/
 .astro/
 playwright-report/
 test-results/
+media-catalog/
 .DS_Store
 .superpowers/
 /work/
